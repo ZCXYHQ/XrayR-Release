@@ -257,7 +257,7 @@ show_log() {
 }
 
 install_bbr() {
-    bash <(curl -Lso- https://raw.githubusercontent.com/ZCXYHQ/Linux/main/bbr.sh)
+    bash <(curl -L -s https://raw.githubusercontent.com/ZCXYHQ/Linux/main/bbr.sh)
     #if [[ $? == 0 ]]; then
     #    echo ""
     #    echo -e "${green}安装 bbr 成功，请重启服务器${plain}"
