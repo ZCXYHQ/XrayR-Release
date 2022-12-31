@@ -78,24 +78,6 @@ wget -N https://raw.githubusercontent.com/ZCXYHQ/XrayR-Release/master/install.sh
 
 [详细使用教程](https://xrayr-project.github.io/XrayR-doc/)
 
-## Thanks
-
-* [Project X](https://github.com/XTLS/)
-* [V2Fly](https://github.com/v2fly)
-* [VNet-V2ray](https://github.com/ProxyPanel/VNet-V2ray)
-* [Air-Universe](https://github.com/crossfw/Air-Universe)
-
 ## Licence
 
 [Mozilla Public License Version 2.0](https://github.com/XrayR-project/XrayR/blob/master/LICENSE)
-
-## Telgram
-
-[XrayR后端讨论](https://t.me/XrayR_project)
-
-[XrayR通知](https://t.me/XrayR_channel)
-
-## Stargazers over time
-
-[![Stargazers over time](https://starchart.cc/XrayR-project/XrayR.svg)](https://starchart.cc/XrayR-project/XrayR)
-
