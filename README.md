@@ -5,114 +5,97 @@ A Xray backend framework that can easily support many panels.
 
 Find the source code here: [ZCXYHQ/XrayR](https://github.com/ZCXYHQ/XrayR)
 
-# 详细使用教程
+## 免责声明
+
+本项目只是本人个人学习开发并维护，本人不保证任何可用性，也不对使用本软件造成的任何后果负责。
+
+## 详细使用教程
 
 [XrayR教程](https://xrayr-project.github.io/XrayR-doc/)
 
-# 一键安装
+## 特点
+
+* 永久开源且免费。
+* 支持V2ray，Trojan， Shadowsocks多种协议。
+* 支持Vless和XTLS等新特性。
+* 支持单实例对接多面板、多节点，无需重复启动。
+* 支持限制在线IP
+* 支持节点端口级别、用户级别限速。
+* 配置简单明了。
+* 修改配置自动重启实例。
+* 方便编译和升级，可以快速更新核心版本， 支持Xray-core新特性。
+
+## 功能介绍
+
+| 功能        | v2ray | trojan | shadowsocks |
+|-----------|-------|--------|-------------|
+| 获取节点信息    | √     | √      | √           |
+| 获取用户信息    | √     | √      | √           |
+| 用户流量统计    | √     | √      | √           |
+| 服务器信息上报   | √     | √      | √           |
+| 自动申请tls证书 | √     | √      | √           |
+| 自动续签tls证书 | √     | √      | √           |
+| 在线人数统计    | √     | √      | √           |
+| 在线用户限制    | √     | √      | √           |
+| 审计规则      | √     | √      | √           |
+| 节点端口限速    | √     | √      | √           |
+| 按照用户限速    | √     | √      | √           |
+| 自定义DNS    | √     | √      | √           |
+
+## 支持前端
+
+| 前端                                                     | v2ray | trojan | shadowsocks             |
+|--------------------------------------------------------|-------|--------|-------------------------|
+| sspanel-uim                                            | √     | √      | √ (单端口多用户和V2ray-Plugin) |
+| v2board                                                | √     | √      | √                       |
+| [PMPanel](https://github.com/ByteInternetHK/PMPanel)   | √     | √      | √                       |
+| [ProxyPanel](https://github.com/ProxyPanel/ProxyPanel) | √     | √      | √                       |
+| [WHMCS (V2RaySocks)](https://v2raysocks.doxtex.com/)   | √     | √      | √                       |
+
+## 软件安装
+
+### 一键安装
 
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/ZCXYHQ/XrayR-Release/master/install.sh)
 ```
-# Docker 安装
+
+OR
 
 ```
-docker pull ghcr.io/xrayr-project/xrayr:latest && docker run --restart=always --name xrayr -d -v ${PATH_TO_CONFIG}/config.yml:/etc/XrayR/config.yml --network=host ghcr.io/xrayr-project/xrayr:latest
+wget -N https://raw.githubusercontent.com/ZCXYHQ/XrayR-Release/master/install.sh && bash install.sh
 ```
 
-# Docker compose 安装
-0. 安装docker-compose: 
-```
-curl -fsSL https://get.docker.com | bash -s docker
-curl -L "https://github.com/docker/compose/releases/download/1.26.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
-```
-1. `git clone https://github.com/XrayR-project/XrayR-release`
-2. `cd XrayR-release`
-3. 编辑config。
-配置文件基本格式如下，Nodes下可以同时添加多个面板，多个节点配置信息，只需添加相同格式的Nodes item即可。
-4. 启动docker：`docker-compose up -d`
-```
-Log:
-  Level: none # Log level: none, error, warning, info, debug 
-  AccessPath: # /etc/XrayR/access.Log
-  ErrorPath: # /etc/XrayR/error.log
-DnsConfigPath: # /etc/XrayR/dns.json Path to dns config
-ConnetionConfig:
-  Handshake: 4 # Handshake time limit, Second
-  ConnIdle: 10 # Connection idle time limit, Second
-  UplinkOnly: 2 # Time limit when the connection downstream is closed, Second
-  DownlinkOnly: 4 # Time limit when the connection is closed after the uplink is closed, Second
-  BufferSize: 64 # The internal cache size of each connection, kB 
-Nodes:
-  -
-    PanelType: "SSpanel" # Panel type: SSpanel, V2board, PMpanel
-    ApiConfig:
-      ApiHost: "http://127.0.0.1:667"
-      ApiKey: "123"
-      NodeID: 41
-      NodeType: V2ray # Node type: V2ray, Shadowsocks, Trojan
-      Timeout: 30 # Timeout for the api request
-      EnableVless: false # Enable Vless for V2ray Type
-      EnableXTLS: false # Enable XTLS for V2ray and Trojan
-      SpeedLimit: 0 # Mbps, Local settings will replace remote settings, 0 means disable
-      DeviceLimit: 0 # Local settings will replace remote settings, 0 means disable
-      RuleListPath: # /etc/XrayR/rulelist Path to local rulelist file
-    ControllerConfig:
-      ListenIP: 0.0.0.0 # IP address you want to listen
-      SendIP: 0.0.0.0 # IP address you want to send pacakage
-      UpdatePeriodic: 60 # Time to update the nodeinfo, how many sec.
-      EnableDNS: false # Use custom DNS config, Please ensure that you set the dns.json well
-      DNSType: AsIs # AsIs, UseIP, UseIPv4, UseIPv6, DNS strategy
-      EnableProxyProtocol: false # Only works for WebSocket and TCP
-      EnableFallback: false # Only support for Trojan and Vless
-      FallBackConfigs:  # Support multiple fallbacks
-        -
-          SNI: # TLS SNI(Server Name Indication), Empty for any
-          Path: # HTTP PATH, Empty for any
-          Dest: 80 # Required, Destination of fallback, check https://xtls.github.io/config/fallback/ for details.
-          ProxyProtocolVer: 0 # Send PROXY protocol version, 0 for dsable
-      CertConfig:
-        CertMode: dns # Option about how to get certificate: none, file, http, dns. Choose "none" will forcedly disable the tls config.
-        CertDomain: "node1.test.com" # Domain to cert
-        CertFile: /etc/XrayR/cert/node1.test.com.cert # Provided if the CertMode is file
-        KeyFile: /etc/XrayR/cert/node1.test.com.key
-        Provider: alidns # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
-        Email: test@me.com
-        DNSEnv: # DNS ENV option used by DNS provider
-          ALICLOUD_ACCESS_KEY: aaa
-          ALICLOUD_SECRET_KEY: bbb
-  # -
-  #   PanelType: "V2board" # Panel type: SSpanel, V2board
-  #   ApiConfig:
-  #     ApiHost: "http://127.0.0.1:668"
-  #     ApiKey: "123"
-  #     NodeID: 4
-  #     NodeType: Shadowsocks # Node type: V2ray, Shadowsocks, Trojan
-  #     Timeout: 30 # Timeout for the api request
-  #     EnableVless: false # Enable Vless for V2ray Type
-  #     EnableXTLS: false # Enable XTLS for V2ray and Trojan
-  #     SpeedLimit: 0 # Mbps, Local settings will replace remote settings
-  #     DeviceLimit: 0 # Local settings will replace remote settings
-  #   ControllerConfig:
-  #     ListenIP: 0.0.0.0 # IP address you want to listen
-  #     UpdatePeriodic: 10 # Time to update the nodeinfo, how many sec.
-  #     EnableDNS: false # Use custom DNS config, Please ensure that you set the dns.json well
-  #     CertConfig:
-  #       CertMode: dns # Option about how to get certificate: none, file, http, dns
-  #       CertDomain: "node1.test.com" # Domain to cert
-  #       CertFile: /etc/XrayR/cert/node1.test.com.cert # Provided if the CertMode is file
-  #       KeyFile: /etc/XrayR/cert/node1.test.com.pem
-  #       Provider: alidns # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
-  #       Email: test@me.com
-  #       DNSEnv: # DNS ENV option used by DNS provider
-  #         ALICLOUD_ACCESS_KEY: aaa
-  #         ALICLOUD_SECRET_KEY: bbb
-```
+### 使用Docker部署软件
 
-## Docker compose升级
-在docker-compose.yml目录下执行：
-```
-docker-compose pull
-docker-compose up -d
-```
+[Docker部署教程](https://xrayr-project.github.io/XrayR-doc/xrayr-xia-zai-he-an-zhuang/install/docker)
+
+### 手动安装
+
+[手动安装教程](https://xrayr-project.github.io/XrayR-doc/xrayr-xia-zai-he-an-zhuang/install/manual)
+
+## 配置文件及详细使用教程
+
+[详细使用教程](https://xrayr-project.github.io/XrayR-doc/)
+
+## Thanks
+
+* [Project X](https://github.com/XTLS/)
+* [V2Fly](https://github.com/v2fly)
+* [VNet-V2ray](https://github.com/ProxyPanel/VNet-V2ray)
+* [Air-Universe](https://github.com/crossfw/Air-Universe)
+
+## Licence
+
+[Mozilla Public License Version 2.0](https://github.com/XrayR-project/XrayR/blob/master/LICENSE)
+
+## Telgram
+
+[XrayR后端讨论](https://t.me/XrayR_project)
+
+[XrayR通知](https://t.me/XrayR_channel)
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/XrayR-project/XrayR.svg)](https://starchart.cc/XrayR-project/XrayR)
+
